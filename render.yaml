@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: whisky-app
+    runtime: ruby
+    buildCommand: "bundle install"
+    startCommand: "bundle exec ruby app.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: whisky-db
+          property: connectionString
+      - key: RACK_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+
+databases:
+  - name: whisky-db
+    databaseName: whisky
+    user: whisky_user
+    region: singapore

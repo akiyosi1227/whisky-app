@@ -1,0 +1,127 @@
+<form action="/post" method="post" enctype="multipart/form-data" class="post">
+  <div class="product-info">
+    <div class="product-type">
+      <div class="whisky-search-container">
+        <input type="text" name="whisky_name" id="whisky-search" placeholder="ポストしたいウイスキー名を記入" autocomplete="off">
+        <ul id="whisky-suggestions" class="whisky-suggestions-list"></ul>
+      </div>
+      <div class="searchbtn">
+        <button type="button" class="post" id="whisky-search-btn" style="border:none; cursor:pointer;">
+          <span>検索</span>
+        </button>
+      </div>
+    </div>
+  </div>
+<input type="hidden" name="img_name" value="<%= @img_name %>">
+  <div class="post-form">
+    <div class="picture">
+      <label class="btn" style="cursor: pointer; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+        <input type="file" name="img" accept="image/*" hidden 
+          onchange="const [file] = this.files; if (file) { 
+            const p = this.parentElement.querySelector('#preview-image');
+            const d = this.parentElement.querySelector('#default-content');
+            p.src = URL.createObjectURL(file); p.style.display = 'block'; d.style.display = 'none'; 
+          }">
+        
+        <div id="default-content">
+          <span class="fa fa-image"></span>
+          <p>写真をアップロード</p>
+        </div>
+        <img src="/images/<%= @img_name %>" alt="">
+      </label>
+    </div>
+  
+    <div class="detail">
+<div class="selected-product" id="selected-product">
+  <div class="product-row">
+    <span>商品名</span>
+    <span id="product-name">-</span>
+    <input type="hidden" name="whisky_name" id="product-name-input">
+  </div>
+  
+  <div class="product-row">
+    <span>年代</span>
+    <span id="product-age">-</span>
+    <input type="hidden" name="age" id="product-age-input">
+  </div>
+
+  <div class="product-row">
+    <span>タイプ</span>
+    <span id="product-type-display">-</span>
+    <input type="hidden" name="type" id="product-type-input">
+  </div>
+</div>
+      
+      <div class="situation">
+        <span>状況</span>
+        <input type="text" name="situation" list="situations-post" placeholder="シチュエーションを選択">
+        <datalist id="situations-post">
+          <option value="プレゼント"><option value="ひとり呑み"><option value="みんなでワイワイ"><option value="食事">
+        </datalist>
+      </div>
+
+      <!-- 星評価 -->
+      <div class="ratings">
+        <div class="rate-row">
+          <span>香り</span>
+          <div class="rate-stars">
+            <input type="radio" id="aroma5" name="aroma" value="5"><label for="aroma5">★</label>
+            <input type="radio" id="aroma4" name="aroma" value="4"><label for="aroma4">★</label>
+            <input type="radio" id="aroma3" name="aroma" value="3"><label for="aroma3">★</label>
+            <input type="radio" id="aroma2" name="aroma" value="2"><label for="aroma2">★</label>
+            <input type="radio" id="aroma1" name="aroma" value="1"><label for="aroma1">★</label>
+          </div>
+        </div>
+      
+        <div class="rate-row">
+          <span>味わい</span>
+          <div class="rate-stars">
+            <input type="radio" id="taste5" name="taste" value="5"><label for="taste5">★</label>
+            <input type="radio" id="taste4" name="taste" value="4"><label for="taste4">★</label>
+            <input type="radio" id="taste3" name="taste" value="3"><label for="taste3">★</label>
+            <input type="radio" id="taste2" name="taste" value="2"><label for="taste2">★</label>
+            <input type="radio" id="taste1" name="taste" value="1"><label for="taste1">★</label>
+          </div>
+        </div>
+      
+        <div class="rate-row">
+          <span>余韻</span>
+          <div class="rate-stars">
+            <input type="radio" id="finish5" name="finish" value="5"><label for="finish5">★</label>
+            <input type="radio" id="finish4" name="finish" value="4"><label for="finish4">★</label>
+            <input type="radio" id="finish3" name="finish" value="3"><label for="finish3">★</label>
+            <input type="radio" id="finish2" name="finish" value="2"><label for="finish2">★</label>
+            <input type="radio" id="finish1" name="finish" value="1"><label for="finish1">★</label>
+          </div>
+        </div>
+      
+        <div class="rate-row">
+          <span>バランス</span>
+          <div class="rate-stars">
+            <input type="radio" id="balance5" name="balance" value="5"><label for="balance5">★</label>
+            <input type="radio" id="balance4" name="balance" value="4"><label for="balance4">★</label>
+            <input type="radio" id="balance3" name="balance" value="3"><label for="balance3">★</label>
+            <input type="radio" id="balance2" name="balance" value="2"><label for="balance2">★</label>
+            <input type="radio" id="balance1" name="balance" value="1"><label for="balance1">★</label>
+          </div>
+        </div>
+      </div>
+  
+      <div class="comment">
+        <span>コメント</span>
+        <textarea name="comment" placeholder="感想を入力"></textarea>
+      </div>
+    </div>
+
+    <div class="sidebtn">
+      <button type="submit" class="post" style="border:none; cursor:pointer;">
+        <span class="fa fa-upload"></span>
+        投稿する
+      </button>
+      <a href="/post" class="post reset">
+        <span class="fa fa-trash"></span>
+        リセット
+      </a>
+    </div>
+  </div>
+</form>

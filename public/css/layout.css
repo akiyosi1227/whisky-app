@@ -1,0 +1,1570 @@
+/* ========================================
+COMMON STYLES
+======================================== */
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,
+p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,
+q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,
+ul,li,fieldset,form,label,legend,table,caption,tbody,
+tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,
+figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,
+video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+body {
+	line-height: 1;
+}
+
+div {
+	word-break: break-all;
+}
+
+article,aside,details,figcaption,figure,footer,
+header,hgroup,menu,nav,
+section {
+	display: block;
+}
+
+nav ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+
+a {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+/* change colours to suit your needs */
+ins {
+	background-color: #ff9;
+	color: #000;
+	text-decoration: none;
+}
+
+/* change colours to suit your needs */
+mark {
+	background-color: #ff9;
+	color: #000;
+	font-style: italic;
+	font-weight: bold;
+}
+
+del {
+	text-decoration: line-through;
+}
+
+abbr[title],
+dfn[title] {
+	border-bottom: 1px dotted;
+	cursor: help;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* change border colour to suit your needs */
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #cccccc;
+	margin: 1em 0;
+	padding: 0;
+}
+
+input,
+select {
+	vertical-align: middle;
+}
+
+* {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box
+}
+
+body {
+	-webkit-text-size-adjust: 100%;
+	-webkit-font-smoothing: antialiased;
+}
+
+a {
+	text-decoration: none;
+	cursor: pointer;
+	word-break: break-all
+}
+
+h2 {
+	font-size: 30px;
+	font-weight: bold;
+	color: #333333
+}
+
+li {
+	list-style: none
+}
+
+img {
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom
+}
+
+/* ======================
+layout.erb
+====================== */
+header {
+	position: fixed;
+	top: 0;
+	z-index: 10;
+	width: 100%;
+	height: 88px;
+	background-color: #696969;
+	border-bottom: 1px solid #333333;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0px 40px;
+
+	.header_logo {
+		width: 75px;
+		height: 75px;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+
+.header_nav {
+	display: flex;
+	gap: 40px;
+	font-size: 30px;
+	font-family: Courier;
+	align-items: center;
+
+	a {
+		color: #ffd700;
+		font-weight: bold;
+		transition: all .3s;
+
+		&:hover {
+			opacity: .5;
+			transition: .3s ease-in-out;
+		}
+	}
+
+	input {
+		color: #ffd700;
+		font-weight: bold;
+		font-size: 30px;
+		font-family: Courier;
+		background: none;
+		border: none;
+		cursor: pointer;
+		transition: all .3s;
+		padding: 0;
+		margin: 0;
+
+		&:hover {
+			opacity: .5;
+			transition: .3s ease-in-out;
+		}
+	}
+
+	.make {
+		color: #333333;
+		background-color: #ffd700;
+		padding: 5px;
+		border-radius: 12px;
+		box-shadow: 0 7px #C9A227;
+
+		&:active {
+			box-shadow: none;
+			position: relative;
+			top: 7px;
+		}
+	}
+}
+
+/* ログアウト状態のスタイル */
+header .header_nav .logged-out a {
+	text-decoration: none;
+	display: inline-block;
+
+	/* 文字を透明にして背景を見せる */
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	/* iOS/Safari対策 */
+
+	/* 背景に点線のストライプを作る */
+	background-image: repeating-linear-gradient(45deg,
+			#ffd700,
+			#ffd700 5px,
+			transparent 5px,
+			transparent 10px);
+
+	/* 背景を文字の形に切り抜く */
+	-webkit-background-clip: text;
+	background-clip: text;
+}
+
+/* マウスが乗った時にグラデーションしながら透明になるエフェクト */
+header .header_nav .logged-out a:hover {
+	background-image: linear-gradient(90deg,
+			rgba(255, 215, 0, 1) 0%,
+			rgba(255, 215, 0, 0.5) 50%,
+			rgba(255, 215, 0, 0) 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	opacity: 0;
+	transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ======================
+makeAccount.erb
+====================== */
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Courier;
+	background: black;
+}
+
+a {
+	text-decoration: none;
+}
+
+.makeAccount {
+	height: 100vh;
+	padding-top: 88px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.login_box {
+		border: 3px solid #333;
+		padding: 40px 60px;
+		width: 600px;
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+
+		h2 {
+			color: white;
+			font-size: 36px;
+			text-align: center;
+			letter-spacing: 0.2em;
+		}
+
+		.form {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+
+			.row {
+				display: flex;
+				align-items: center;
+				gap: 20px;
+
+				span {
+					width: 200px;
+					color: white;
+					font-size: 28px;
+					font-weight: bold;
+				}
+
+				input {
+					width: 300px;
+					font-size: 26px;
+					border-radius: 6px;
+				}
+			}
+		}
+
+		.buttons {
+			display: flex;
+			justify-content: center;
+			gap: 30px;
+
+			input {
+				width: 250px;
+				height: 50px;
+				font-size: 26px;
+				font-weight: bold;
+				border-radius: 12px;
+				border: none;
+				cursor: pointer;
+				background-color: #ffd700;
+				color: #333;
+				box-shadow: 0 7px #C9A227;
+				transition: opacity 0.3s ease, transform 0.1s ease;
+
+				&:hover {
+					opacity: 0.7;
+				}
+
+				&:active {
+					box-shadow: none;
+					transform: translateY(7px);
+				}
+			}
+		}
+	}
+}
+
+/* ======================
+login.erb
+====================== */
+.login {
+	height: 100vh;
+	padding-top: 88px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.login_box {
+		border: 3px solid #333;
+		padding: 40px 60px;
+		width: 600px;
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+
+		h2 {
+			color: white;
+			font-size: 36px;
+			text-align: center;
+			letter-spacing: 0.2em;
+		}
+
+		.form {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+
+			.row {
+				display: flex;
+				align-items: center;
+				gap: 20px;
+
+				span {
+					width: 200px;
+					color: white;
+					font-size: 28px;
+					font-weight: bold;
+				}
+
+				input {
+					width: 300px;
+					font-size: 26px;
+					border-radius: 6px;
+				}
+			}
+		}
+
+		.buttons {
+			display: flex;
+			justify-content: center;
+			gap: 30px;
+
+			input {
+				width: 200px;
+				height: 50px;
+				font-size: 26px;
+				font-weight: bold;
+				border-radius: 12px;
+				border: none;
+				cursor: pointer;
+				background-color: #ffd700;
+				color: #333;
+				box-shadow: 0 7px #C9A227;
+				transition: opacity 0.3s ease, transform 0.1s ease;
+
+				&:hover {
+					opacity: 0.7;
+				}
+
+				&:active {
+					box-shadow: none;
+					transform: translateY(7px);
+				}
+			}
+		}
+	}
+}
+
+/* ======================
+top.erb
+====================== */
+.first_view {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+
+	/* スライド設定 */
+	.slide {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		animation: switch 21s infinite;
+	}
+
+	/* 背景画像 */
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* キャッチコピー */
+	.catch {
+		position: absolute;
+		margin: 0;
+		color: #ffd700;
+		background-color: black;
+		font-size: 40px;
+		font-family: Courier;
+		font-weight: bold;
+		right: 5%;
+		white-space: nowrap;
+	}
+
+	/* テキスト位置 */
+	.catch1 {
+		top: 25%;
+	}
+
+	.catch2 {
+		top: 50%;
+	}
+
+	.catch3 {
+		top: 75%;
+	}
+
+	/* 7秒ずつ表示 */
+	.slide1 {
+		animation-delay: 0s;
+	}
+
+	.slide2 {
+		animation-delay: 7s;
+	}
+
+	.slide3 {
+		animation-delay: 14s;
+	}
+}
+
+/* 切り替えアニメーション */
+@keyframes switch {
+	0% {
+		opacity: 0;
+	}
+
+	5% {
+		opacity: 1;
+	}
+
+	33% {
+		opacity: 1;
+	}
+
+	34% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+.type {
+	padding: 100px 50px;
+	background-color: #000;
+
+	h2 {
+		font-size: 40px;
+		font-family: Courier;
+		font-weight: bold;
+		color: white;
+		margin-bottom: 40px;
+	}
+
+	.type_whisky {
+		display: flex;
+		justify-content: center;
+		gap: 24px;
+
+		li {
+			a {
+				display: block;
+				width: 100%;
+				background-color: #111;
+				border-radius: 12px;
+				padding: 20px;
+				text-align: center;
+				color: #ffd700;
+				font-weight: bold;
+				transition: transform 0.3s ease, opacity 0.3s;
+
+				img {
+					width: 200px;
+					height: auto;
+					display: block;
+					margin: 0 auto 12px;
+				}
+
+				span {
+					display: block;
+					font-size: 20px;
+					letter-spacing: 0.05em;
+				}
+
+				&:hover {
+					transform: translateY(-10px);
+					opacity: 0.5;
+				}
+			}
+		}
+	}
+}
+
+
+
+/* ======================
+  Top Page - Review Section
+====================== */
+.review {
+  padding: 120px 50px;
+  background-color: #696969; /* 背景グレー */
+
+  h2 {
+    font-size: 40px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+  }
+
+  /* 6個のカードを並べるグリッド */
+  .review_whisky {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 横に3つ */
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+
+    li {
+      a {
+        width: 100%;
+        height: 220px; /* カードの高さを統一 */
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background-color: black;
+        border-radius: 12px;
+        padding: 20px;
+        color: #fff;
+        text-decoration: none;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        border: 1px solid transparent;
+        box-sizing: border-box;
+
+        &:hover {
+          transform: translateY(-10px);
+          border-color: #ffd700; /* ホバー時にゴールドの枠線 */
+        }
+
+        /* 画像エリア */
+        img, .no-image {
+          width: 180px;
+          height: 180px;
+          object-fit: cover;
+          border-radius: 6px;
+          flex-shrink: 0;
+          background-color: #222;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #666;
+          font-size: 14px;
+        }
+
+        /* テキストエリア */
+        .review_text {
+          display: flex;
+          flex-direction: column;
+          justify-content: center; /* 中央寄せ */
+          gap: 4px;
+          flex-grow: 1;
+          overflow: hidden; /* はみ出し防止 */
+
+          /* 商品名（下線付き） */
+          .name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: underline;
+            text-decoration-color: #ffd700;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+			max-width: 180px; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 長すぎる名前を...にする */
+          }
+
+          /* 年代 / タイプ */
+          .product-sub-info {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            
+            span {
+              display: inline;
+            }
+          }
+
+          /* 総合評価（星） */
+          .total-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+
+            .label {
+              font-size: 11px;
+              color: #888;
+              font-weight: bold;
+            }
+
+            .stars {
+              font-size: 18px;
+              color: #ffd700;
+              letter-spacing: 2px;
+            }
+          }
+
+          /* コメント（2行制限） */
+          .comment {
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.5;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+            
+            /* 2行で省略する設定 */
+            display: -webkit-box;
+            -webkit-line-clamp: 2; 
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ======================
+  Responsive Adjustments - top.erb, reviews.erb で使用
+====================== */
+@media (max-width: 1300px) {
+  .review .review_whisky {
+    grid-template-columns: repeat(2, 1fr); /* 画面が狭くなったら2列 */
+  }
+}
+
+@media (max-width: 850px) {
+  .review {
+    padding: 60px 20px;
+    
+    .review_whisky {
+      grid-template-columns: 1fr; /* スマホサイズは1列 */
+      
+      li a {
+        height: auto;
+        padding: 15px;
+        
+        img, .no-image {
+          width: 120px;
+          height: 120px;
+        }
+      }
+    }
+  }
+}
+
+/* フッターセクション - top.erb で使用 */
+.footer {
+	background-image: url(../images/footer.png);
+	background-position: center top;
+	background-repeat: no-repeat;
+	width: 100%;
+	height: 240px;
+
+	.footer_inner {
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		padding-top: 20px;
+
+		.footer_title {
+			color: #ffd700;
+			font-size: 30px;
+			margin-bottom: 20px;
+		}
+
+		p {
+			color: white;
+			font-size: 20px;
+			font-weight: bold;
+			font-family: Courier;
+			letter-spacing: 1px;
+		}
+
+		a {
+			color: white;
+		}
+
+		.sns {
+			display: flex;
+			justify-content: center;
+			font-size: 30px;
+			gap: 10px;
+			margin: 20px 0;
+
+			span {
+				width: 50px;
+				height: 50px;
+			}
+		}
+	}
+
+	.footer_copyright {
+		background-color: black;
+		text-align: center;
+		color: #fff;
+		font-size: 16px;
+		padding: 10px 0;
+	}
+}
+
+/* ======================
+post.erb
+====================== */
+.post {
+    /* 既存の .product-info 内の .searchbtn を button タグに対応させる */
+    .product-info .searchbtn {
+        padding: 0; /* buttonのデフォルトパディングをリセット */
+        border: none;
+        
+        button.post {
+            width: 100%;
+            height: 100%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+            font-size: 16;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    /* 既存の .picture をプレビュー対応に強化 */
+    .post-form .picture {
+        position: relative;
+        overflow: hidden;
+
+        /* JSで表示を切り替える img タグのスタイル */
+        #preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* アスペクト比を維持して収める */
+            display: none;      /* 初期は非表示 */
+            padding: 10px;
+        }
+
+        /* 未選択時のアイコン表示 */
+        #default-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            
+            .fa {
+                font-size: 150px;
+                color: white;
+            }
+            p {
+                font-size: 24px;
+                font-weight: bold;
+                color: white;
+            }
+        }
+    }
+
+    /* 下部ボタンエリアの button タグ対応 */
+    .sidebtn {
+        button.post {
+            /* 既存の .post クラスのスタイルをそのまま適用 */
+            font-family: inherit;
+            appearance: none;
+            -webkit-appearance: none;
+            
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+}
+
+
+.post {
+    /* 商品情報セクション（ヘッダー部分） */
+    .product-info {
+        display: flex;
+        gap: 40px;
+        background-color: black;
+        padding-left: 40px;
+        margin-top: 88px;
+        border-bottom: 3px solid #333333;
+        font-family: Courier;
+        height: 70px;
+
+        .product-name,
+        .product-type {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            span {
+                color: white;
+                font-size: 18px;
+                font-weight: bold;
+                width: 100px;
+            }
+
+            input {
+                font-size: 16px;
+                width: 300px;
+                border-radius: 6px;
+                padding: 8px;
+            }
+
+			.searchbtn {
+				width: 100%;
+            	height: 45px;
+            	display: flex;
+            	justify-content: center;
+            	align-items: center;
+				padding: 5px;
+				background-color: #ffd700;
+				color: black;
+				border-radius: 10px;
+				font-weight: bold;
+				font-size: 16px;
+				transition: opacity 0.3s ease, transform 0.1s ease;
+				border: none;
+				cursor: pointer;
+
+				span {
+					width: auto;
+					font-size: 16px;
+					color: black;
+					font-weight: bold;
+				}
+
+				&:hover {
+					opacity: 0.7;
+				}
+
+				&:active {
+					transform: scale(0.9);
+				}
+			}
+        }
+    }
+
+    /* 投稿フォームのメインコンテンツ */
+    .post-form {
+        display: flex;
+        background-color: black;
+        width: 100%;
+        height: calc(100vh - 88px - 70px - 70px);
+        border: 3px solid #333333;
+        font-family: Courier;
+
+        .picture {
+            display: flex;
+            width: 40%;
+            height: 100%;
+            border-right: 10px solid #333333;
+            justify-content: center;
+            align-items: center;
+
+            .btn {
+                display: flex;
+                flex-direction: column;
+                color: white;
+                align-items: center;
+                padding: 20px;
+                gap: 10px;
+
+                .fa {
+                    font-size: 150px;
+                }
+
+                p {
+                    font-size: 24px;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .detail {
+            display: flex;
+            width: 60%;
+            flex-direction: column;
+            padding: 25px 30px;
+            gap: 15px;
+            overflow-y: auto;
+
+            span {
+                color: white;
+                width: 120px;
+                font-size: 16px;
+                font-weight: bold;
+                letter-spacing: 0.1em;
+            }
+
+            .situation {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+
+                input {
+                    font-size: 14px;
+                    width: 250px;
+                    border-radius: 6px;
+                    padding: 6px;
+                }
+            }
+
+            .ratings {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .rate-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+
+                    .rate-stars {
+                        display: flex;
+                        flex-direction: row-reverse;
+                        letter-spacing: 0.3em;
+
+                        input {
+                            display: none;
+                        }
+
+                        label {
+                            font-size: 20px;
+                            color: #333;
+                            cursor: pointer;
+                        }
+
+                        input:checked ~ label {
+                            color: gold;
+                        }
+                    }
+                }
+            }
+
+            .comment {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+
+                textarea {
+                    font-size: 14px;
+                    width: 100%;
+                    height: 100px;
+                    border-radius: 6px;
+                    padding: 8px;
+                }
+            }
+        }
+    }
+
+    /* 下部ボタンエリア */
+    .sidebtn {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        padding: 15px;
+        border-top: none;
+        height: 70px;
+        align-items: center;
+
+        .post {
+            width: 160px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            background-color: #ffd700;
+            color: black;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: opacity 0.3s ease, transform 0.1s ease;
+            border: none;
+            cursor: pointer;
+
+            span {
+                margin-right: 8px;
+                width: auto;
+                font-size: 16px;
+                color: black;
+                font-weight: bold;
+            }
+
+            &:hover {
+                opacity: 0.7;
+            }
+
+            &:active {
+                transform: scale(0.9);
+            }
+
+            &.reset {
+                background-color: #666;
+                color: white;
+
+                span {
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+/* Selected Product Display - post.erb で使用 */
+.selected-product {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	background-color: #1a1a1a;
+	padding: 12px;
+	border-radius: 6px;
+	margin-bottom: 15px;
+
+	.product-row {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		padding: 8px 0;
+		border-bottom: 1px solid #333;
+
+		span {
+			color: white;
+			font-size: 14px;
+
+			&:first-child {
+				width: 120px;
+				font-weight: bold;
+				letter-spacing: 0.1em;
+			}
+
+			&:last-child {
+				flex: 1;
+				font-size: 16px;
+				color: #ffd700;
+				font-weight: bold;
+			}
+		}
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+}
+
+.post .picture #preview-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
+	width: 100%;
+	height: 100%;
+}
+
+.post .picture #preview-image {
+	max-width: 90%;
+	max-height: 90%;
+	object-fit: contain;
+	border-radius: 8px;
+}
+
+.post .picture .remove-btn {
+	padding: 8px 20px;
+	background-color: #ff4444;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 14px;
+	transition: opacity 0.3s ease;
+}
+
+.post .picture .remove-btn:hover {
+	opacity: 0.7;
+}
+
+
+
+/* ======================
+  Whisky Search Autocomplete - post.erb, reviews.erb で使用
+====================== */
+.whisky-search-container {
+	position: relative;
+	display: inline-block;
+
+	input {
+		width: 100%;
+		font-size: 16px;
+		border-radius: 6px;
+		padding: 8px;
+	}
+
+	.whisky-suggestions-list {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		list-style: none;
+		margin: 4px 0 0 0;
+		padding: 0;
+		background-color: white;
+		border: 1px solid #ccc;
+		border-radius: 6px;
+		max-height: 200px;
+		overflow-y: auto;
+		z-index: 1000;
+		display: none;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+		li {
+			padding: 10px 12px;
+			cursor: pointer;
+			font-size: 14px;
+			color: #333;
+			border-bottom: 1px solid #eee;
+			transition: background-color 0.2s ease;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+			&:hover {
+				background-color: #f0f0f0;
+			}
+
+			&:active {
+				background-color: #ffd700;
+				color: black;
+			}
+		}
+	}
+}
+
+/* ======================
+reviews.erb
+====================== */
+.filter {
+	height: 50px;
+	display: flex;
+	align-items: center;
+	background: #111;
+	padding: 0px 40px;
+
+	&.type {
+		margin-top: 88px;
+	}
+
+	span {
+		color: white;
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	input {
+		width: 300px;
+		font-size: 16px;
+		border-radius: 6px;
+	}
+}
+
+.type {
+	margin-top: 88px;
+}
+
+.filter.situation select {
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    padding: 8px;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+
+#filter-btn {
+    background-color: #ffd700;
+    color: black;
+    border: none;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+#filter-btn:hover {
+    background-color: #ffea00;
+}
+
+/* layout.css への追記イメージ */
+.filter.situation button.reset {
+  background-color: #666; /* グレー */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: opacity 0.3s;
+}
+
+.filter.situation button.reset:hover {
+  opacity: 0.7;
+}
+
+.filter.situation button.reset span {
+  color: white; /* 既存のCSSでspanに色がついてる場合の対策 */
+}
+
+.filter.situation button.filter-btn span {
+  color: black; /* 既存のCSSでspanに色がついてる場合の対策 */
+}
+
+.ratings .rate-row .stars {
+    color: #ffd700; /* 金色 */
+    letter-spacing: 2px;
+    font-size: 18px;
+}
+
+/* 投稿一覧セクション - reviews.erb で使用 */
+.posts {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .post-card {
+        display: flex;
+        border: 3px solid #333;
+        height: 300px;
+
+        .picture {
+            width: 40%;
+            border-right: 10px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                max-width: 90%;
+                max-height: 90%;
+            }
+        }
+
+        .detail {
+            width: 60%;
+            padding: 20px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: white;
+
+            span {
+                width: 200px;
+                font-weight: bold;
+                display: inline-block;
+            }
+
+            .row {
+                display: flex;
+                gap: 10px;
+            }
+
+            .ratings {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                .rate-row {
+                    display: flex;
+                    gap: 10px;
+                }
+            }
+
+            .comment {
+                display: flex;
+                gap: 10px;
+
+                p {
+                    line-height: 1.5;
+                }
+            }
+        }
+    }
+}
+.reviews {
+	padding-top: 88px;
+	background-color: black;
+
+	.post-section {
+		.product-info {
+			display: flex;
+			gap: 40px;
+			background-color: black;
+			padding: 15px 50px;
+			border-bottom: 3px solid #333333;
+			font-family: Courier;
+			height: 70px;
+
+			.product-name,
+			.product-type {
+				display: flex;
+				align-items: center;
+				gap: 15px;
+
+				span {
+					color: white;
+					font-size: 18px;
+					font-weight: bold;
+					width: 300px;
+				}
+
+				input {
+					font-size: 16px;
+					width: 300px;
+					border-radius: 6px;
+					padding: 8px;
+				}
+			}
+		}
+
+		.post-form {
+			display: flex;
+			background-color: black;
+			width: 100%;
+			border: 3px solid #333333;
+			border-top: none;
+			font-family: Courier;
+			min-height: 450px;
+
+			.picture {
+				display: flex;
+				width: 40%;
+				border-right: 10px solid #333333;
+				justify-content: center;
+				align-items: center;
+
+				.btn {
+					display: flex;
+					flex-direction: column;
+					color: white;
+					align-items: center;
+					border: 10px dashed #333333;
+					padding: 20px;
+					gap: 10px;
+
+					.fa {
+						font-size: 150px;
+					}
+
+					p {
+						font-size: 24px;
+						font-weight: bold;
+					}
+				}
+			}
+
+			.detail {
+				display: flex;
+				width: 60%;
+				flex-direction: column;
+				padding: 25px 30px;
+				gap: 15px;
+				overflow-y: auto;
+
+				span {
+					color: white;
+					width: 120px;
+					font-size: 16px;
+					font-weight: bold;
+					letter-spacing: 0.1em;
+				}
+
+				.situation {
+					display: flex;
+					align-items: center;
+					gap: 15px;
+
+					input {
+						font-size: 14px;
+						width: 250px;
+						border-radius: 6px;
+						padding: 6px;
+					}
+				}
+
+				.ratings {
+					display: flex;
+					flex-direction: column;
+					gap: 10px;
+
+					.rate-row {
+						display: flex;
+						align-items: center;
+						gap: 15px;
+
+						.rate-stars {
+							display: flex;
+							flex-direction: row-reverse;
+							letter-spacing: 0.3em;
+
+							input {
+								display: none;
+							}
+
+							label {
+								font-size: 20px;
+								color: #333;
+								cursor: pointer;
+							}
+
+							input:checked~label {
+								color: gold;
+							}
+						}
+					}
+				}
+
+				.comment {
+					display: flex;
+					flex-direction: column;
+					gap: 8px;
+
+					textarea {
+						font-size: 14px;
+						width: 100%;
+						height: 100px;
+						border-radius: 6px;
+						padding: 8px;
+					}
+				}
+			}
+		}
+
+		.sidebtn {
+			display: flex;
+			justify-content: center;
+			gap: 15px;
+			padding: 15px;
+			border-top: none;
+			height: 70px;
+			align-items: center;
+
+			.post {
+				width: 160px;
+				height: 45px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 5px;
+				background-color: #ffd700;
+				color: black;
+				border-radius: 10px;
+				font-weight: bold;
+				font-size: 16px;
+				transition: opacity 0.3s ease, transform 0.1s ease;
+				border: none;
+				cursor: pointer;
+
+				span {
+					margin-right: 8px;
+					width: auto;
+					font-size: 16px;
+					color: black;
+					font-weight: bold;
+				}
+
+				&:hover {
+					opacity: 0.7;
+				}
+
+				&:active {
+					transform: scale(0.9);
+				}
+
+				&.reset {
+					background-color: #666;
+					color: white;
+
+					span {
+						color: white;
+					}
+				}
+			}
+		}
+	}
+}
+

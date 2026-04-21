@@ -1,0 +1,29 @@
+<div class="login">
+	<% if session[:error] %>
+		<script>
+			alert('<%= session.delete(:error) %>');
+		</script>
+	<% end %>
+	<form action="/login" method="post">
+		<div class="login_box">
+			<h2>LOGIN</h2>
+
+			<div class="form">
+				<div class="row">
+				<span>NAME</span>
+				<input type="text" name="name">
+				</div>
+
+				<div class="row">
+				<span>PASSWORD</span>
+				<input type="password" name="password">
+				</div>
+			</div>
+
+			<div class="buttons">
+				<input type="submit" value="ログイン">
+
+			</div>
+		</div>
+  	</form>
+</div>

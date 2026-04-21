@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>Whisky posts</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <%# <script src="/js/custom.js"></script> %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+
+  <body>
+    <%# ヘッダー %>
+    <header>
+      <%# ヘッダーロゴ %>
+      <div class="header_logo">
+          <img src="./images/logo.png">
+      </div>
+      <%# ヘッダー項目 %>
+      <ul class="header_nav">
+          <li class="<%= 'logged-out' if session[:user].nil? %>"><a href="/top">TOP</a></li>
+          <li class="<%= 'logged-out' if session[:user].nil? %>"><a href="/post">POST</a></li>
+          <li class="<%= 'logged-out' if session[:user].nil? %>"><a href="/reviews">REVIEWS</a></li>
+          <li><a href="/login">
+            <% if session[:user] %>
+				      <form action="/logout" method="post">
+					      <input type="hidden" name="_method" value="DELETE">
+					      <input type="submit" value="LOGOUT">
+				      </form>
+            <% else %>
+              <span>LOGIN</span>
+				    <% end %>
+          </a></li>
+          <a href="/makeAccount" class="make">MAKE ACCOUNT</a>
+      </ul>
+    </header>
+
+    <%= yield %>
+
+    <script>
+      // ウイスキー名入力時の候補表示
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('whisky-search');
+        const suggestionsList = document.getElementById('whisky-suggestions');
+        const searchBtn = document.getElementById('whisky-search-btn');
+        const productNameSpan = document.getElementById('product-name');
+        const productAgeSpan = document.getElementById('product-age');
+
+        // 検索値をスプリット処理する関数
+        function splitWhiskyInfo(value) {
+          const parts = value.split(/\s+/);
+          let productName = '';
+          let productAge = '';
+          
+          if (parts.length > 1) {
+            // 最初の要素を商品名、2番目以降をすべて年代として結合
+            productName = parts[0];
+            productAge = parts.slice(1).join(' ');
+          } else {
+            // スペースがない場合は全て商品名
+            productName = value;
+            productAge = '';
+          }
+          
+          return { productName, productAge };
+        }
+
+        if (searchInput) {
+          // 候補表示処理のみ（リアルタイム分割表示は削除）
+          searchInput.addEventListener('input', async function() {
+            const query = this.value.trim();
+            
+            if (query.length === 0) {
+              suggestionsList.innerHTML = '';
+              suggestionsList.style.display = 'none';
+              return;
+            }
+
+            try {
+              // post.erb 内の入力監視部分を修正
+              const response = await fetch('/api/whiskies?mode=post&q=' + encodeURIComponent(query));
+              const data = await response.json();
+              console.log('API応答:', data.suggestions);
+              
+              suggestionsList.innerHTML = '';
+              
+              if (data.suggestions.length > 0) {
+                data.suggestions.forEach(suggestion => {
+                  const li = document.createElement('li');
+                  li.textContent = suggestion;
+                  li.addEventListener('click', function() {
+                    searchInput.value = suggestion;
+                    suggestionsList.innerHTML = '';
+                    suggestionsList.style.display = 'none';
+                  });
+                  suggestionsList.appendChild(li);
+                });
+                suggestionsList.style.display = 'block';
+              } else {
+                suggestionsList.style.display = 'none';
+              }
+            } catch (error) {
+              console.error('Error fetching whisky suggestions:', error);
+            }
+          });
+          
+          // 他の場所をクリックしたら候補を非表示
+          document.addEventListener('click', function(event) {
+            if (!event.target.closest('.whisky-search-container')) {
+              suggestionsList.style.display = 'none';
+            }
+          });
+        }
+
+// layout.erb の検索ボタン処理内
+if (searchBtn) {
+  searchBtn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    const value = searchInput.value.trim();
+    if (!value) return;
+
+    try {
+      const response = await fetch(`/api/whisky_details?q=${encodeURIComponent(value)}`);
+      const data = await response.json();
+
+      if (data.found) {
+        // 各要素へ反映
+        document.getElementById('product-name').textContent = data.name;
+        document.getElementById('product-name-input').value = data.name;
+        
+        document.getElementById('product-age').textContent = data.age || '-';
+        document.getElementById('product-age-input').value = data.age || '';
+        
+        // タイプを反映
+        document.getElementById('product-type-display').textContent = data.type || '-';
+        document.getElementById('product-type-input').value = data.type || '';
+      } else {
+        alert("詳細情報が見つかりませんでした。");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
+}
+      });
+    </script>
+    
+  </body>
+</html>

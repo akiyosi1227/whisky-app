@@ -1,0 +1,139 @@
+<div class="top">
+  <!-- 見出しセクション -->
+  <section class="first_view">
+    <!-- スライド1 -->
+    <div class="slide slide1">
+      <img src="./images/view01.png" alt="">
+      <p class="catch catch1">On the trail of the perfect dram</p>
+    </div>
+    <!-- スライド2 -->
+    <div class="slide slide2">
+      <img src="./images/view02.png" alt="">
+      <p class="catch catch2">お気に入りの一杯を共有しよう</p>
+    </div>
+    <!-- スライド3 -->
+    <div class="slide slide3">
+      <img src="./images/view03.png" alt="">
+      <p class="catch catch3">みんなの一杯を味わおう</p>
+    </div>
+  </section>
+
+  <!-- 種類セクション -->
+  <section class="type">
+    <h2>Whisky Type</h2>
+    <ul class="type_whisky">
+      <li>
+        <a href="/reviews">
+          <img src="./images/japanese.png">
+          <span>ジャパニーズ</span>
+        </a>
+      </li>
+  
+      <li>
+        <a href="/reviews">
+          <img src="./images/scotch.png">
+          <span>スコッチ</span>
+        </a>
+      </li>
+  
+      <li>
+        <a href="/reviews">
+          <img src="./images/irish.png">
+          <span>アイリッシュ</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/reviews">
+          <img src="./images/canadian.png">
+          <span>カナディアン</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="/reviews">
+          <img src="./images/american.png">
+          <span>アメリカン</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+  
+  <!-- レビューセクション -->
+  <section class="review">
+  <h2>Review</h2>
+  <ul class="review_whisky">
+    <% @random_posts.each do |post| %>
+      <li>
+        <a href="/reviews">
+          <% if post['img_url'] && !post['img_url'].empty? %>
+            <img src="./images/<%= post['img_url'] %>" alt="">
+          <% else %>
+            <div class="no-image">No Image</div>
+          <% end %>
+          
+          <div class="review_text">
+            <span class="name">
+              <%# 10文字まで切り取り、10文字を超える場合は ... を付与 %>
+              <%= post['whisky_name'].to_s.slice(0, 10) %><%= "..." if post['whisky_name'].to_s.length > 10 %>
+            </span>
+            
+            <div class="product-sub-info">
+              <span><%= post['age'] || '-' %></span> / <span><%= post['type'] || 'Unknown' %></span>
+            </div>
+
+            <div class="total-rating">
+              <span class="label">総合評価</span>
+              <span class="stars">
+                <% 
+                  # 4項目の平均値を計算（小数点以下四捨五入）
+                  avg = ((post['aroma'].to_i + post['taste'].to_i + post['finish'].to_i + post['balance'].to_i) / 4.0).round 
+                %>
+                <%= "★" * avg %><%= "☆" * (5 - avg) %>
+              </span>
+            </div>
+
+            <span class="comment">
+              <%= post['comment'] %>
+            </span>
+          </div>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</section>
+  
+  <!-- フッターセクション -->
+  <footer class="footer">
+    <div class="footer_inner">
+      <p class="footer_title">株式会社ASATOソリューション</p>
+      <p>
+        〒123-4567<br>
+        沖縄県*****1-23-45<br>
+        ASATOビル3F
+      </p>
+      <p>
+        <a href="#">E-mail:asato.12345@gmail.com</a>
+      </p>
+      <p>
+        Phone-No.:080-1234-5678
+      </p>
+
+      <div class="sns">
+        <a href="#" class="btn facebook">
+          <span class="fa fa-facebook"></span>
+        </a>
+        <a href="#" class="btn twitter">
+          <span class="fa fa-twitter"></span>
+        </a>
+        <a href="#" class="btn instagram">
+          <span class="fa fa-instagram"></span>
+        </a>
+      </div>
+
+    </div>
+    <div class="footer_copyright">
+      Copyright ©asato ***** co lid, All rights reserved.
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,28 @@
+<div class="makeAccount">
+	<% if session[:error] %>
+		<script>
+			alert('<%= session.delete(:error) %>');
+		</script>
+	<% end %>
+	<form action="/makeAccount" method="post">
+		<div class="login_box">
+			<h2>MAKE ACCOUNT</h2>
+
+			<div class="form">
+				<div class="row">
+					<span>NAME</span>
+					<input type="text" name="name">
+				</div>
+
+				<div class="row">
+					<span>PASSWORD</span>
+					<input type="password" name="password">
+				</div>
+			</div>
+
+			<div class="buttons">
+				<input type="submit" value="アカウント作成">
+			</div>
+		</div>
+	</form>
+</div>

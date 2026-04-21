@@ -1,0 +1,170 @@
+<div class="reviews">
+  <section class="reviews-section">
+    <div class="filter situation">
+      <div class="whisky-search-container" style="position: relative; display: inline-block;">
+        <span>商品名：</span>
+        <input type="text" id="filter-whisky-name" placeholder="ウイスキー名を入力" autocomplete="off" value="<%= params[:whisky_name] %>">
+        <ul id="filter-name-suggestions" class="whisky-suggestions-list"></ul>
+      </div>
+
+      <div class="whisky-search-container" style="position: relative; display: inline-block;">
+        <span>年代：</span>
+        <select id="filter-age">
+          <option value="">すべて</option>
+          <% if params[:age] && !params[:age].empty? %>
+            <option value="<%= params[:age] %>" selected><%= params[:age] %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <span>タイプ：</span>
+      <select id="filter-type">
+        <option value="">すべて</option>
+        <% ["ジャパニーズ", "スコッチ", "アイリッシュ", "カナディアン", "アメリカン"].each do |type| %>
+          <option value="<%= type %>" <%= 'selected' if params[:type] == type %>>
+            <%= type %>
+          </option>
+        <% end %>
+      </select>
+
+      <span>状況：</span>
+      <select id="filter-situation">
+        <option value="">すべて</option>
+        <% ["プレゼント", "ひとり呑み", "みんなでワイワイ", "食事"].each do |sit| %>
+          <option value="<%= sit %>" <%= 'selected' if params[:situation] == sit %>>
+            <%= sit %>
+          </option>
+        <% end %>
+      </select>
+      
+      <button type="button" class="filter-btn" id="filter-btn" style="padding: 5px 15px; cursor: pointer;">
+        <span>絞り込む</span>
+      </button>
+      <button type="button" class="reset" onclick="location.href='/reviews'" style="padding: 5px 15px; cursor: pointer; margin-left: 5px;">
+        <span>リセット</span>
+      </button>
+    </div>
+  </section>
+</div>
+
+    <section class="posts">
+      <% @posts.each do |post| %>
+        <article class="post-card">
+          <div class="picture">
+            <% if post['img_url'] %>
+              <img src="/images/<%= post['img_url'] %>" alt="Review Image">
+            <% else %>
+              <div class="no-image">No Image</div>
+            <% end %>
+          </div>
+
+          <div class="detail">
+            <div class="row"><span>商品名</span><%= post['whisky_name'] %></div>
+            <div class="row"><span>年代</span><%= post['age'] || '-' %></div>
+            <div class="row"><span>タイプ</span><%= post['type'] || '-' %></div>
+            <div class="row"><span>状況</span><%= post['situation'] %></div>
+
+            <div class="ratings">
+              <% # 評価項目をループで回す %>
+              <% [['aroma', '香り'], ['taste', '味わい'], ['finish', '余韻'], ['balance', 'バランス']].each do |key, label| %>
+                <div class="rate-row">
+                  <span><%= label %></span>
+                  <span class="stars">
+                    <% # 数値の分だけ★、残りを☆で表示 %>
+                    <% rating = post["#{key}"].to_i %>
+                    <%= "★" * rating %><%= "☆" * (5 - rating) %>
+                  </span>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="comment">
+              <span>コメント</span>
+              <p><%= post['comment'] %></p>
+            </div>
+            
+
+          </div>
+        </article>
+      <% end %>
+
+      <% if @posts.ntuples == 0 %>
+        <p style="color: white; text-align: center;">まだ投稿がありません。</p>
+      <% end %>
+    </section>
+  </section>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('filter-whisky-name');
+    const nameSuggestions = document.getElementById('filter-name-suggestions');
+    const ageSelect = document.getElementById('filter-age');
+
+    // 1. 商品名の候補表示 (post.erbと同様のロジック)
+    nameInput.addEventListener('input', async function() {
+      const query = this.value.trim();
+      if (query.length === 0) {
+        nameSuggestions.style.display = 'none';
+        return;
+      }
+
+      const response = await fetch('/api/whiskies?q=' + encodeURIComponent(query));
+      const data = await response.json();
+      
+      nameSuggestions.innerHTML = '';
+      if (data.suggestions.length > 0) {
+        data.suggestions.forEach(suggestion => {
+          const li = document.createElement('li');
+          // suggestion は "山崎 12年" の形式なので、商品名のみ抽出するか、そのまま入れる
+          li.textContent = suggestion; 
+          li.addEventListener('click', function() {
+            // スペースで分割して商品名だけを入力欄に入れる（年代は後で動的に取るため）
+            nameInput.value = suggestion.split(/\s+/)[0]; 
+            nameSuggestions.style.display = 'none';
+            updateAgeOptions(nameInput.value); // 年代候補を更新
+          });
+          nameSuggestions.appendChild(li);
+        });
+        nameSuggestions.style.display = 'block';
+      }
+    });
+
+    // 2. 商品名に連動して年代プルダウンを更新する関数
+    async function updateAgeOptions(whiskyName) {
+      const response = await fetch('/api/whisky_ages?name=' + encodeURIComponent(whiskyName));
+      const data = await response.json();
+      
+      ageSelect.innerHTML = '<option value="">すべて</option>';
+      data.ages.forEach(age => {
+        const opt = document.createElement('option');
+        opt.value = age;
+        opt.textContent = age;
+        ageSelect.appendChild(opt);
+      });
+    }
+
+    // 3. 絞り込みボタンの処理
+    document.getElementById('filter-btn').addEventListener('click', function() {
+      const params = new URLSearchParams();
+      const name = nameInput.value;
+      const age = ageSelect.value;
+      const type = document.getElementById('filter-type').value;
+      const situation = document.getElementById('filter-situation').value;
+
+      if (name) params.append('whisky_name', name);
+      if (age) params.append('age', age);
+      if (type) params.append('type', type);
+      if (situation) params.append('situation', situation);
+
+      window.location.href = `/reviews?${params.toString()}`;
+    });
+
+    // 外側クリックで候補を閉じる
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.whisky-search-container')) {
+        nameSuggestions.style.display = 'none';
+      }
+    });
+  });
+</script>
