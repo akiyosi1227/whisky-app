@@ -11,27 +11,42 @@ set :port, ENV['PORT'] || 4567
 require 'sinatra/cookies'
 enable :sessions
 
-require 'pg'
+# require 'pg'
 
 # ======================
 # データベース
 # ======================
+# db_url = ENV['DATABASE_URL']
+
+# if db_url
+#   # Renderなどのホスティング環境
+#   client = PG.connect(db_url)
+# else
+#   # 開発環境
+#   require 'dotenv'
+#   Dotenv.load
+  
+#   client = PG.connect(
+#     host: ENV['DB_HOST'] || 'localhost',
+#     dbname: ENV['DB_NAME'] || 'whisky',
+#     user: ENV['DB_USER'],
+#     password: ENV['DB_PASSWORD']
+#   )
+# end
+
+# app.rb
+require 'pg'
+require 'dotenv/load' if development? # 開発環境のみdotenvを使う
+
+# Renderの環境変数 'DATABASE_URL' があればそれを使う
 db_url = ENV['DATABASE_URL']
 
 if db_url
-  # Renderなどのホスティング環境
+  # 本番環境（Render）
   client = PG.connect(db_url)
 else
-  # 開発環境
-  require 'dotenv'
-  Dotenv.load
-  
-  client = PG.connect(
-    host: ENV['DB_HOST'] || 'localhost',
-    dbname: ENV['DB_NAME'] || 'whisky',
-    user: ENV['DB_USER'],
-    password: ENV['DB_PASSWORD']
-  )
+  # ローカル開発環境（自分のPC）
+  client = PG.connect(dbname: 'whisky', user: '...') # 自分の設定
 end
 
 get '/' do
