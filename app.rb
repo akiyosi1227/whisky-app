@@ -50,7 +50,7 @@ else
 end
 
 get '/' do
-  erb :top  # views/top.erb を表示する場合
+  redirect '/top'  # views/top.erb を表示する場合
 end
 
 # ======================
